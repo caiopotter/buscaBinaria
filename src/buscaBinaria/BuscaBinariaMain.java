@@ -65,29 +65,39 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
 		flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		setSize(570,360);
         setTitle("Busca Binária");
-        
-        labelCaminhoArquivo = new JLabel("Arquivo .dat:");
+
+        instanciarComponentes();
+        incluirListeners();
+        adicionarComponentes();
+	}
+
+	private void incluirListeners() {
+		botaoBuscaCaminhoArquivo.addActionListener(this);
+		botaoBuscaCEP.addActionListener(this);
+		acaoSobre.addActionListener(this);
+	}
+
+	private void instanciarComponentes() throws ParseException {
+		labelCaminhoArquivo = new JLabel("Arquivo .dat:");
         textoCaminhoArquivo = new JTextField();
         botaoBuscaCaminhoArquivo = new JButton("Selecionar arquivo");
         labelCEP = new JLabel("Digite o CEP:");
         javax.swing.text.MaskFormatter formatacaoCEP = new javax.swing.text.MaskFormatter("#####-###");
         textoCEP = new javax.swing.JFormattedTextField(formatacaoCEP);
         botaoBuscaCEP = new JButton("Buscar CEP");
-        botaoBuscaCaminhoArquivo.addActionListener(this);
-        botaoBuscaCEP.addActionListener(this);
         areadeTexto = new JTextArea(14, 40);
         areadeTexto.setEditable(false);
         scrollBar = new JScrollPane(areadeTexto);
-        
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         menuAjuda = new JMenu("Ajuda");
-        menuBar.add(menuAjuda);
         acaoSobre = new JMenuItem("Sobre");
-        menuAjuda.add(acaoSobre);
-        acaoSobre.addActionListener(this);
-        
-        add(flowPanel);
+	}
+	
+	private void adicionarComponentes() {
+		menuBar.add(menuAjuda);
+		menuAjuda.add(acaoSobre);
+		add(flowPanel);
         flowPanel.add(gridPanel);
         gridPanel.add(labelCaminhoArquivo);
         gridPanel.add(textoCaminhoArquivo);
@@ -113,17 +123,21 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
 		arquivo.seek(((inicio+fim)/2)*300);
 		endereco.leEndereco(arquivo);
 		if(endereco.getCep().equals(cepDigitado)) {
-			areadeTexto.setText("CEP: " + endereco.getCep());
-			areadeTexto.append("\n" + "Logradouro: " + endereco.getLogradouro());
-			areadeTexto.append("\n" + "Bairro: " + endereco.getBairro());
-			areadeTexto.append("\n" + "Cidade: " + endereco.getCidade());
-			areadeTexto.append("\n" + "Estado: " + endereco.getEstado());
-			areadeTexto.append("\n" + "Numero de iterações na busca binária: " + numeroDeIteracoes);
+			escreverResultado(endereco);
 		}else if(cepDigitado.compareTo(endereco.getCep()) > 0) {
 			buscaBinaria(arquivo, cepDigitado, (arquivo.getFilePointer()+1)/300, fim);
 		}else {
 			buscaBinaria(arquivo, cepDigitado, inicio, (arquivo.getFilePointer()-1)/300);
 		}
+	}
+
+	private static void escreverResultado(Endereco endereco) {
+		areadeTexto.setText("CEP: " + endereco.getCep());
+		areadeTexto.append("\n" + "Logradouro: " + endereco.getLogradouro());
+		areadeTexto.append("\n" + "Bairro: " + endereco.getBairro());
+		areadeTexto.append("\n" + "Cidade: " + endereco.getCidade());
+		areadeTexto.append("\n" + "Estado: " + endereco.getEstado());
+		areadeTexto.append("\n" + "Numero de iterações na busca binária: " + numeroDeIteracoes);
 	}
 
 	@Override

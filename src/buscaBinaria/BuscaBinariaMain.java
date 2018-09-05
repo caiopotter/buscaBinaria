@@ -63,7 +63,7 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
 		caminhoJar = recebeCaminhoJar();
 		gridPanel = new JPanel(new GridLayout(2, 3));
 		flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		setSize(570,360);
+		setSize(500,230);
         setTitle("Busca Binária");
 
         instanciarComponentes();
@@ -85,7 +85,7 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
         javax.swing.text.MaskFormatter formatacaoCEP = new javax.swing.text.MaskFormatter("#####-###");
         textoCEP = new javax.swing.JFormattedTextField(formatacaoCEP);
         botaoBuscaCEP = new JButton("Buscar CEP");
-        areadeTexto = new JTextArea(14, 40);
+        areadeTexto = new JTextArea(6, 40);
         areadeTexto.setEditable(false);
         scrollBar = new JScrollPane(areadeTexto);
         menuBar = new JMenuBar();

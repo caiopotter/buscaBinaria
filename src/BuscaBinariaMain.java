@@ -15,6 +15,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -23,6 +27,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class BuscaBinariaMain extends JFrame implements ActionListener{
 	
+	private static final String ERRO_OCORRIDO = "Um erro ocorreu \n";
+	private static final String NOME_ARQUIVO_DAT = "Arquivo dat";
+	private static final String CEP_NÃO_ENCONTRADO = "CEP %s não encontrado.";
+	private static final String CAMINHO_DE_ARQUIVO_VAZIO = "Caminho de arquivo vazio.";
 	/**
 	 * 
 	 */
@@ -38,10 +46,14 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
 	static JScrollPane scrollBar;
     static JPanel gridPanel, flowPanel;
     static JFormattedTextField textoCEP;
+    static JMenuBar menuBar;
+    static JMenu menuAjuda;
+    static JMenuItem acaoSobre;
+    static JFrame GUI;
 
 	public static void main(String[] args) throws Exception{
 		
-		JFrame GUI = new BuscaBinariaMain();
+		GUI = new BuscaBinariaMain();
         GUI.setVisible(true);
         GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -65,6 +77,15 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
         areadeTexto = new JTextArea(14, 40);
         areadeTexto.setEditable(false);
         scrollBar = new JScrollPane(areadeTexto);
+        
+        menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+        menuAjuda = new JMenu("Ajuda");
+        menuBar.add(menuAjuda);
+        acaoSobre = new JMenuItem("Sobre");
+        menuAjuda.add(acaoSobre);
+        acaoSobre.addActionListener(this);
+        
         add(flowPanel);
         flowPanel.add(gridPanel);
         gridPanel.add(labelCaminhoArquivo);
@@ -106,6 +127,9 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent evento) {
+		if(evento.getSource() == acaoSobre) {
+			JOptionPane.showMessageDialog(GUI, "Criado por Caio Potter \n limapotter@gmail.com");
+		}
 		if(evento.getSource() == botaoBuscaCEP) {
 			String cep = textoCEP.getText().replace("-", "");
 			try {
@@ -114,20 +138,20 @@ public class BuscaBinariaMain extends JFrame implements ActionListener{
 				buscaBinaria(arquivo, cep, 0L, (arquivo.length()/300));
 				arquivo.close();
 			} catch (IOException e) {
-				areadeTexto.setText("Um erro ocorreu \n");
+				areadeTexto.setText(ERRO_OCORRIDO);
 				if(textoCaminhoArquivo.getText().isEmpty()) {
-					areadeTexto.append("Caminho de arquivo vazio.");
+					areadeTexto.append(CAMINHO_DE_ARQUIVO_VAZIO);
 				}
 				areadeTexto.append(e.getMessage());
 			} catch (StackOverflowError e) {
-				areadeTexto.setText(String.format("CEP %s não encontrado.", textoCEP.getText()));
+				areadeTexto.setText(String.format(CEP_NÃO_ENCONTRADO, textoCEP.getText()));
 			}
 		}
 		if(evento.getSource() == botaoBuscaCaminhoArquivo) {
 			final JFileChooser fc = new JFileChooser();
 			fc.setCurrentDirectory(caminhoJar);
-			fc.setFileFilter(new FileNameExtensionFilter("Arquivo dat", "dat"));
-			int returnVal = fc.showOpenDialog(null);
+			fc.setFileFilter(new FileNameExtensionFilter(NOME_ARQUIVO_DAT, "dat"));
+			int returnVal = fc.showOpenDialog(GUI);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				textoCaminhoArquivo.setText(fc.getSelectedFile().getPath());
 			}

@@ -31,7 +31,7 @@ public class BuscaBinariaMain extends JFrame{
 	private static final String INFO_AUTOR = "Criado por Caio Potter \n limapotter@gmail.com";
 	private static final String ERRO_OCORRIDO = "Um erro ocorreu \n";
 	private static final String NOME_ARQUIVO_DAT = "Arquivo dat";
-	private static final String CEP_N√O_ENCONTRADO = "CEP %s n„o encontrado.";
+	private static final String CEP_NAO_ENCONTRADO = "CEP %s n√£o encontrado.";
 	private static final String CAMINHO_DE_ARQUIVO_VAZIO = "Caminho de arquivo vazio.";
 	private static final int BYTES_POR_REGISTRO_NO_ARQUIVO = 300;
 
@@ -76,7 +76,7 @@ public class BuscaBinariaMain extends JFrame{
 		flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		setSize(500,230);
 		setResizable(false);
-        setTitle("Busca Bin·ria");
+        setTitle("Busca Bin√°ria");
 	}
 
 	private void incluirListeners() {
@@ -158,7 +158,7 @@ public class BuscaBinariaMain extends JFrame{
 		areadeTexto.append("\n" + "Bairro: " + endereco.getBairro());
 		areadeTexto.append("\n" + "Cidade: " + endereco.getCidade());
 		areadeTexto.append("\n" + "Estado: " + endereco.getEstado());
-		areadeTexto.append("\n" + "Numero de iteraÁıes na busca bin·ria: " + numeroDeIteracoes);
+		areadeTexto.append("\n" + "Numero de itera√ß√µes na busca bin√°ria: " + numeroDeIteracoes);
 	}
 	
 	public void executaAcaoBuscaCEP() {
@@ -175,7 +175,7 @@ public class BuscaBinariaMain extends JFrame{
 			}
 			areadeTexto.append(e.getMessage());
 		} catch (StackOverflowError e) {
-			areadeTexto.setText(String.format(CEP_N√O_ENCONTRADO, textoCEP.getText()));
+			areadeTexto.setText(String.format(CEP_NAO_ENCONTRADO, textoCEP.getText()));
 		}
 	}
 	

@@ -75,6 +75,7 @@ public class BuscaBinariaMain extends JFrame{
 		gridPanel = new JPanel(new GridLayout(2, 3));
 		flowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		setSize(500,230);
+		setResizable(false);
         setTitle("Busca Binária");
 	}
 

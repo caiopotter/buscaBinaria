@@ -40,15 +40,7 @@ public class BuscaBinaria {
 	public int getNumeroDeIteracoes() {
 		return numeroDeIteracoes;
 	}
-
-	public void setNumeroDeIteracoes(int numeroDeIteracoes) {
-		this.numeroDeIteracoes = numeroDeIteracoes;
-	}
-
-	public RandomAccessFile getArquivo() {
-		return arquivo;
-	}
-
+	
 	public void setArquivo(RandomAccessFile arquivo) {
 		this.arquivo = arquivo;
 	}
@@ -61,24 +53,12 @@ public class BuscaBinaria {
 		this.enderecoEncontrado = enderecoEncontrado;
 	}
 
-	public String getCepDigitado() {
-		return cepDigitado;
-	}
-
 	public void setCepDigitado(String cepDigitado) {
 		this.cepDigitado = cepDigitado;
 	}
 
-	public Long getInicio() {
-		return inicio;
-	}
-
 	public void setInicio(Long inicio) {
 		this.inicio = inicio;
-	}
-
-	public Long getFim() {
-		return fim;
 	}
 
 	public void setFim(Long fim) {

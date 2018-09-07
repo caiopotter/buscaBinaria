@@ -26,6 +26,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import servico.BuscaBinaria;
+
 public class BuscaBinariaMain extends JFrame{
 	
 	private static final String INFO_AUTOR = "Criado por Caio Potter \n limapotter@gmail.com";
@@ -40,7 +42,6 @@ public class BuscaBinariaMain extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	static int numeroDeIteracoes;
 	static RandomAccessFile arquivo;
 	static File caminhoJar;
 	static JTextArea areadeTexto;
@@ -138,21 +139,15 @@ public class BuscaBinariaMain extends JFrame{
 		return new RandomAccessFile(caminhoArquivo, "r");
 	}
 
-	private static void buscaBinaria(RandomAccessFile arquivo, String cepDigitado, Long inicio, Long fim) throws IOException {
-		Endereco endereco = new Endereco();
-		numeroDeIteracoes++;
-		arquivo.seek(((inicio+fim)/2)*BYTES_POR_REGISTRO_NO_ARQUIVO);
-		endereco.leEndereco(arquivo);
-		if(endereco.getCep().equals(cepDigitado)) {
-			escreverResultado(endereco);
-		}else if(cepDigitado.compareTo(endereco.getCep()) > 0) {
-			buscaBinaria(arquivo, cepDigitado, (arquivo.getFilePointer()+1)/BYTES_POR_REGISTRO_NO_ARQUIVO, fim);
-		}else {
-			buscaBinaria(arquivo, cepDigitado, inicio, (arquivo.getFilePointer()-1)/BYTES_POR_REGISTRO_NO_ARQUIVO);
-		}
+	private static void buscaBinaria(String cepDigitado) throws IOException {
+		BuscaBinaria busca = new BuscaBinaria(arquivo, cepDigitado, 0L, (arquivo.length()/BYTES_POR_REGISTRO_NO_ARQUIVO));
+		busca.executarBuscaBinaria();
+		Endereco endereco = busca.getEnderecoEncontrado();
+		int numeroDeIteracoes = busca.getNumeroDeIteracoes();
+		escreverResultado(endereco, numeroDeIteracoes);
 	}
 
-	private static void escreverResultado(Endereco endereco) {
+	private static void escreverResultado(Endereco endereco, int numeroDeIteracoes) {
 		areadeTexto.setText("CEP: " + endereco.getCep());
 		areadeTexto.append("\n" + "Logradouro: " + endereco.getLogradouro());
 		areadeTexto.append("\n" + "Bairro: " + endereco.getBairro());
@@ -165,8 +160,7 @@ public class BuscaBinariaMain extends JFrame{
 		String cep = textoCEP.getText().replace("-", "");
 		try {
 			arquivo = selecionarArquivo(textoCaminhoArquivo.getText());
-			numeroDeIteracoes = 0;
-			buscaBinaria(arquivo, cep, 0L, (arquivo.length()/BYTES_POR_REGISTRO_NO_ARQUIVO));
+			buscaBinaria(cep);
 			arquivo.close();
 		} catch (IOException e) {
 			areadeTexto.setText(ERRO_OCORRIDO);
